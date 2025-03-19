@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SolMemeDiscordBot": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
