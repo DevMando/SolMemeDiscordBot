@@ -41,15 +41,16 @@ namespace SolMemeDiscordBot
             {
                 Console.WriteLine($"Received message: {message.Content ?? String.Empty}");
                 {
-                    if (message.Content.ToLower() == "yo")
+                    string[] greetings = new string[] { "Hey", "Hello", "Hi", "Wassup", "Waddup", "Howdy", "Yo", "You called?" };
+                   
+                    if (message.Content.ToLower().Contains("hi"))
                     {
-                        string[] greetings = new string[] { "Hey", "Hello", "Hi", "Wassup", "Waddup", "Howdy", "Yo", "You called?" };
                         Random random = new Random();
                         int index = random.Next(greetings.Length);
 
                         await ReplyAsync(message, $"{greetings[index]} {message.Author.GlobalName}!");
                     }
-                    else if (message.Content.ToLower().Contains("get tokens"))
+                    else if (message.Content.ToLower().Contains("get-tokens"))
                     {
                         string response = "Here are the MOST viewed tokens at this very moment:\n";
                         RugCheck rugCheck = new RugCheck();

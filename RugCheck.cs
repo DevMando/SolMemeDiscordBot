@@ -18,7 +18,7 @@ namespace SolMemeDiscordBot
 
         public async Task<string> GetMostViewedTokens()
         {
-            string result = "I'm unable to retrieve that info at the moment. Try again later.";
+            string result = String.Empty;
 
             using var client = new HttpClient();
 
@@ -31,17 +31,28 @@ namespace SolMemeDiscordBot
                     string content = await response.Content.ReadAsStringAsync();
                     dynamic data = JsonConvert.DeserializeObject(content);
 
+                    foreach (var token in data)
+                    {
+                        result += $"{token.metadata.name} ({token.metadata.symbol})\n";
+                        result += $"User Visits: {token.user_visits}\n";
+                        result += $"Visits: {token.visits}\n";
+                        result += $"Score: {token.score}\n";
+                        result += $"https://gmgn.ai/sol/token/{token.mint}\n\n";
+                    }
 
 
+                    return result;
                 }
                 else
                 {
                     Console.WriteLine($"Network Error: {response.StatusCode}");
+                    result = "I'm unable to retrieve that info at the moment. Try again later.";
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Exception: {ex.Message}");
+                result = "I'm unable to retrieve that info at the moment. Try again later.";
             }
 
             return result;
