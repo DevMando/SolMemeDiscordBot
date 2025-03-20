@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace SolMemeDiscordBot
 {
@@ -17,7 +18,9 @@ namespace SolMemeDiscordBot
         public Bot()
         {
             var config = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               ///.AddEnvironmentVariables()
                .Build();
 
             this.DiscordToken = config["Discord_Token"];
