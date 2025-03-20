@@ -18,9 +18,8 @@ namespace SolMemeDiscordBot
         public Bot()
         {
             var config = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-               ///.AddEnvironmentVariables()
+               
                .Build();
 
             this.DiscordToken = config["Discord_Token"];
