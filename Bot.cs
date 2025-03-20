@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace SolMemeDiscordBot
 {
@@ -13,17 +15,33 @@ namespace SolMemeDiscordBot
     {
         private readonly DiscordSocketClient _client;
         private string DiscordToken = String.Empty;
+        private const string DummyToken = "PLACE_YOUR_DISCORD_TOKEN_HERE_FOR_LOCAL_DEVELOPMENT";
 
         public Bot()
         {
-            var config = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-               .Build();
-
-            this.DiscordToken = config["Discord_Token"];
+            SetupDiscordToken();
 
             this._client = new DiscordSocketClient();
             this._client.MessageReceived += MessageHandler;
+        }
+
+        protected void SetupDiscordToken()
+        {
+            var config = new ConfigurationBuilder()
+              .SetBasePath(Directory.GetCurrentDirectory())
+              .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+              .AddEnvironmentVariables()
+              .Build();
+
+            this.DiscordToken = config["Discord_Token"];
+
+
+            if (string.IsNullOrEmpty(this.DiscordToken.Trim()) || this.DiscordToken == DummyToken)
+            {
+                throw new Exception("Discord token is missing! Set it in appsettings.json or as an environment variable.");
+            }
+
+            Console.WriteLine("Token loaded successfully!");
         }
 
         public async Task Start()
@@ -42,7 +60,7 @@ namespace SolMemeDiscordBot
                 Console.WriteLine($"Received message: {message.Content ?? String.Empty}");
                 {
                     string[] greetings = new string[] { "Hey", "Hello", "Hi", "Wassup", "Waddup", "Howdy", "Yo", "You called?" };
-                   
+
                     if (message.Content.ToLower().Contains("hi"))
                     {
                         Random random = new Random();
